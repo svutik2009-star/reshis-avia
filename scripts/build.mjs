@@ -1,0 +1,11 @@
+import {readFileSync,writeFileSync,mkdirSync,copyFileSync} from 'node:fs';
+import {validateData} from './validate-data.mjs';
+const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
+const parseCsv=text=>{const lines=text.trim().split(/\r?\n/);const keys=lines.shift().split(',');if(new Set(keys).size!==keys.length)throw Error('Повторные колонки CSV.');return lines.map(line=>{const cells=line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(v=>v.replace(/^"|"$/g,'').replace(/""/g,'"'));if(cells.length!==keys.length)throw Error('Неверное количество значений в CSV.');return Object.fromEntries(keys.map((key,i)=>[key,['route','date','name'].includes(key)?cells[i]:(cells[i].trim()===''?NaN:Number(cells[i]))]));});};
+const data={forecast:parseCsv(read('data/my_forecast.csv')),routes:parseCsv(read('data/routes.csv')),metrics:JSON.parse(read('data/metrics.json'))};
+validateData(data);
+const page=read('public/index.html');
+const worker=read('src/worker.js').replace("import PAGE from './page.generated.js';",'const PAGE='+JSON.stringify(page)+';').replace("import DATA from './data.generated.js';",'const DATA='+JSON.stringify(data)+';');
+mkdirSync('dist/server',{recursive:true});mkdirSync('dist/.openai',{recursive:true});
+writeFileSync('dist/server/index.js',worker);copyFileSync('.openai/hosting.json','dist/.openai/hosting.json');
+console.log('Built Worker with 155 flights and embedded UI.');

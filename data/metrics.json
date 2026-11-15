@@ -1,0 +1,14 @@
+{
+  "model": "DirectTabular",
+  "production_model": "DirectTabular_FULL",
+  "autogluon_version": "1.6.3",
+  "validation_mae": 38.264161534463206,
+  "test_mae": 61.26334956999748,
+  "horizon": 31,
+  "routes": 5,
+  "features": [],
+  "seed": 42,
+  "train_rows": 7115,
+  "history_rows": 7270,
+  "test_used_once": true
+}
