@@ -1,0 +1,14 @@
+{
+  "name": "reshis-avia",
+  "main": "dist/server/index.js",
+  "compatibility_date": "2026-01-01",
+  "workers_dev": true,
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "reshis-avia-db",
+      "database_id": "c2730db4-66d6-4463-8efd-f3ac55d22e82",
+      "migrations_dir": "drizzle"
+    }
+  ]
+}
